@@ -1,0 +1,32 @@
+# Config Client 연결 설정 (애플리케이션 시작 전 로드)
+spring:
+  application:
+    name: user-service  # Config Repository의 폴더명과 일치해야 함
+  
+  cloud:
+    config:
+      # Config Server 연결 정보
+      uri: http://localhost:8888  # Config Server 주소
+      enabled: true              # Config Server 활성화
+      
+      # 환경별 프로필 설정
+      profile: default  # default, dev, prod 등 (spring.profiles.active와 동일)
+      label: main       # Git 브랜치명
+      
+      # 연결 설정
+      fail-fast: true  # Config Server에 연결할 수 없으면 애플리케이션 시작 실패
+      retry:
+        initial-interval: 1000      # 재시도 간격 (ms)
+        multiplier: 1.1            # 재시도 간격 배수
+        max-attempts: 3            # 최대 재시도 횟수 (줄임)
+        max-interval: 2000         # 최대 재시도 간격 (ms)
+      
+      # 요청 타임아웃 설정
+      request-connect-timeout: 3000  # 연결 타임아웃 (줄임)
+      request-read-timeout: 5000     # 읽기 타임아웃 (줄임)
+
+# Config Client 디버깅용 로깅
+logging:
+  level:
+    org.springframework.cloud.config: INFO  # Config Client 로그
+    org.springframework.cloud.bootstrap: INFO  # Bootstrap 과정 로그
